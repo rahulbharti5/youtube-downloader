@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube Downloader</title>
+    <style>
+      #header-wrap .container{
+        display:flex;
+        justify-content: space-between;
+      }
+      #header-wrap .container{
+        display:flex;
+        justify-content: space-between;
+        align-content: center;
+        align-items: baseline;
+      }
+      .logo h1{
+        margin:0;
+        padding:0;
+      }
+      .logo a{
+        text-decoration: none;
+        color:black;
+      }
+      .search-box{
+        padding:10px;
+      }
+      input[type=search],input[type=submit]{
+        padding: 7px 0;
+        border: none;
+        /* border:.1px solid black; */
+        border:1px solid #ccc;
+        outline: none;
+        background-image: url(https://th.bing.com/th/id/OIP.-9A-FOvJIk9-zy2b0vofXAHaHX?pid=ImgDet&rs=1);
+        background-size:20px;
+        padding:7px 10px;
+        background-position:right 5px center, left top;
+        background-repeat: no-repeat, repeat;
+    }
+      input[type=submit]{
+         border:1px solid black;
+         border-radius:5px;
+         color: rgb(0, 0, 0);
+         font-weight: 900;
+         background-image: url(https://th.bing.com/th/id/OIP.-9A-FOvJIk9-zy2b0vofXAHaHX?pid=ImgDet&rs=1);
+        background-size:20px;
+        padding:7px;
+        background-position:right 5px center, left top;
+        background-repeat: no-repeat, repeat;
+      }
+      .container{
+        width: 80%;
+        margin:0 auto;
+      }
+ 
+      ul.menu{
+        list-style-type:none;
+        padding-left:0;
+      }
+      ul.menu li {
+       display:inline;
+       padding:0;
+       margin: 0;
+      }
+      ul.menu li a{
+        text-decoration: none;
+        color:black;
+        padding: 7px;
+      }
+      ul.menu li a:hover{
+        text-decoration: none;
+        color:#fff;
+        background-color: black;
+        padding: 7px;
+      }
+      ul.list{
+         list-style-type: none;
+         padding-left: 0;
+      }
+      ul.list .content{
+        display: flex;
+      }
+      ul.list .content .meta{
+        padding:15px;
+      }
+      li.video .thumb{
+       width:50%;
+      }
+      li.video .thumb img{
+       width:100%;
+      }
+    </style>
+</head>
+<body>
+  <div class="outer">
+    <header id="header-wrap">
+        <div class="container">
+            <div class="logo">
+                <a href="#">
+                  <h1>Youtube</h1>
+                  <small>Youtube Downloader</small>
+                </a>
+            </div>
+            <div class="search-box">
+                <form action="" method="post" style="display:inline">
+                    {% csrf_token %}
+                  <input type="search" placeholder="Hit Enter..." id="link" name="link">
+                  <!-- <input type="submit" value="" style="background-image:url('https://th.bing.com/th/id/OIP.-9A-FOvJIk9-zy2b0vofXAHaHX?pid=ImgDet&rs=1');"> -->
+                </form>
+            </div>
+        </div>
+    </header>
+    <nav id="nav-wrap">
+        <div class="container">
+            <ul class="menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Songs</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main id="content-wrap">
+      <div class="container">
+    
+        <div class="content">
+            <div class="thumb">
+                <video id="video" width="100%" src="" style="border:1px solid #ccc;" controls>
+                </video>
+            </div>
+            <div class="meta">
+                <h2 id="title">{{ title }}</h2>
+            </div>
+           <select id="select" onchange="playVid(this)">
+                {% if urls %}
+                  {% for video in urls %}
+                    <option value="{{ video.url }}">{{ video.resolution }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+            <button onclick="download()">Download</button>
+            <script>
+                function playVid(url){
+                   document.getElementById("video").src = url.value;
+                }
+                window.onload = ()=>{
+                    playVid(document.getElementById("select"));
+                }
+                
+                function download(){
+                    var a = document.createElement("a");
+                        a.href = document.getElementById("select").value;
+                        a.title = document.getElementById("title").innerText;
+                        a.download = a.href;
+                        document.body.appendChild(a)
+                        a.click()
+                        document.body.removeChild(a)
+                }
+            </script>
+        <!-- <ul class="list">
+            <li class="video">
+              <div class="content">
+                  <div class="thumb">
+                      <img src="https://th.bing.com/th/id/OIP.iSu2RcCcdm78xbxNDJMJSgHaEo?pid=ImgDet&rs=1" alt="">
+                  </div>
+                  <div class="meta">
+                      <h2>Title this is the title of the video</h2>
+                      <a href="#">144px</a>
+                      <a href="#">360px</a>
+                      <a href="#">720px</a>
+                  </div>
+              </div>
+            </li>
+         </ul> -->
+      
+        </div>
+
+    </main>
+  </div>
+</body>
+</html>
